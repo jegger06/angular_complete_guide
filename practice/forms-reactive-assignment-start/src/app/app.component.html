@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <!--
+          Create a Form with the following Controls and Validators
+          1) Project Name (should not be empty)
+          2) Mail (should not be a empty and a valid email)
+          3) Project Status Dropdown, with three values: 'Stable', 'Critical', 'Finished'
+          4) Submit Button
+
+          Add your own Validator which doesn't allow "Test" as a Project Name
+
+          Also implement that Validator as an async Validator (replace the other one)
+
+          Upon submitting the form, simply print the value to the console
+      -->
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Project Name</label>
+          <input 
+            type="text" 
+            id="name"
+            class="form-control"
+            formControlName="projectName">
+            <div
+              *ngIf="projectForm.get('projectName').invalid && projectForm.get('projectName').touched"
+              class="alert alert-danger">
+              <span *ngIf="projectForm.get('projectName').errors.required">Please enter a project name!</span>
+              <span *ngIf="projectForm.get('projectName').errors.projectNameNotValid">Please do not input a TEST project!</span>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email"
+            class="form-control"
+            formControlName="email">
+          <div
+            *ngIf="projectForm.get('email').invalid && projectForm.get('email').touched"
+            class="alert alert-danger">
+            <span *ngIf="projectForm.get('email').errors.required">Email is required!</span>
+            <span *ngIf="projectForm.get('email').errors.email && !projectForm.get('email').errors.required">Email NOT valid!</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="project_status">Project Status</label>
+          <select 
+            id="name"
+            class="form-control"
+            formControlName="projectStatus">
+            <option value="">Select a status!</option>
+            <option *ngFor="let stat of status" [value]="stat">{{ stat }}</option>
+          </select>
+          <div
+              *ngIf="projectForm.get('projectStatus').invalid && projectForm.get('projectStatus').touched"
+              class="alert alert-danger">
+              <span *ngIf="projectForm.get('projectStatus').errors.required">Please select a project status!</span>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
