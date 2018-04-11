@@ -4,14 +4,15 @@ import { FormsModule } from '@angular/forms';
 
 import { ShoppingListComponent } from './shopping-list.component';
 import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
-import { Routes, RouterModule } from '@angular/router';
 
-const shoppingListRoute: Routes = [
-  {
-    path: '',
-    component: ShoppingListComponent
-  }
-]
+// import { Routes, RouterModule } from '@angular/router';
+
+// const shoppingListRoute: Routes = [
+//   {
+//     path: '',
+//     component: ShoppingListComponent
+//   }
+// ]
 
 @NgModule({
   declarations: [
@@ -20,11 +21,7 @@ const shoppingListRoute: Routes = [
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    RouterModule.forChild(shoppingListRoute)
-  ],
-  exports: [
-    RouterModule
+    FormsModule
   ]
 })
 export class ShoppingListModule {

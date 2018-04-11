@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipe.model';
 import 'rxjs/Rx';
@@ -10,22 +10,32 @@ import { AuthService } from '../auth/auth.service';
 export class DataStorageService {
 
   constructor(
-    private http: Http,
+    private httpClient: HttpClient,
     private recipeService: RecipeService,
     private authService: AuthService
   ) { }
 
   storeRecipes() {
-    const token = this.authService.getToken();
-    return this.http.put('https://udemy-http-e3e1e.firebaseio.com/recipes.json?auth=' + token, this.recipeService.getRecipes());
+    // return this.httpClient.put('https://udemy-http-e3e1e.firebaseio.com/recipes.json', this.recipeService.getRecipes(), {
+    //   observe: 'body',
+    //   params: new HttpParams().set('auth', token)
+    //   // headers: new HttpHeaders().set('Authorization', 'Bearer 1asddsssdfaasdfw')
+    // });
+    const req = new HttpRequest('PUT', 'https://udemy-http-e3e1e.firebaseio.com/recipes.json', this.recipeService.getRecipes(), {
+      reportProgress: true
+    });
+
+    return this.httpClient.request(req);
   }
 
   getRecipes() {
-    const token = this.authService.getToken();
-
-    return this.http.get('https://udemy-http-e3e1e.firebaseio.com/recipes.json?auth=' + token)
-      .map((response: Response) => {
-        const recipes: Array<Recipe> = response.json();
+    // return this.httpClient.get<Array<Recipe>>('https://udemy-http-e3e1e.firebaseio.com/recipes.json?auth=' + token)
+    return this.httpClient.get<Array<Recipe>>('https://udemy-http-e3e1e.firebaseio.com/recipes.json', {
+      observe: 'body',
+      responseType: 'json',
+    })
+      .map((recipes) => {
+        console.log(recipes)
         for (let recipe of recipes) {
           if (!recipe['ingredients']) {
             recipe['ingredients'] = [];
